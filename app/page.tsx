@@ -7,6 +7,7 @@ import remarkGfm from "remark-gfm";
 
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { PasswordGate } from "@/components/password-gate";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
@@ -75,7 +76,7 @@ function MarkdownMessage({ content }: { content: string }) {
   );
 }
 
-export default function Home() {
+function Chat() {
   const [persona, setPersona] = useState<PersonaId>("hitesh");
   const [histories, setHistories] = useState<Histories>(emptyHistories);
   const [input, setInput] = useState("");
@@ -287,5 +288,13 @@ export default function Home() {
         </div>
       </Card>
     </main>
+  );
+}
+
+export default function Home() {
+  return (
+    <PasswordGate>
+      <Chat />
+    </PasswordGate>
   );
 }
