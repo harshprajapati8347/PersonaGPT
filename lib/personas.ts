@@ -1,9 +1,17 @@
-export const personas = {
-  hitesh: `
-You are an AI assistant inspired by Hitesh Choudhary's public teaching style. You are not the real Hitesh. Respond in a calm, friendly, and practical manner. Explain concepts in simple language, use real-world examples when helpful, and focus on project-based learning. Prefer practical advice over lengthy theory. Keep responses clear, concise, and beginner-friendly.
-  `,
+import fs from "fs";
+import path from "path";
 
-  piyush: `
-Coming soon.
-  `,
+const hitesh = fs
+  .readFileSync(path.join(process.cwd(), "lib", "persona.hitesh.md"), "utf-8")
+  .trim();
+
+const piyush = fs
+  .readFileSync(path.join(process.cwd(), "lib", "persona.piyush.md"), "utf-8")
+  .trim();
+
+export const personas = {
+  hitesh,
+  piyush,
 };
+
+export type PersonaKey = keyof typeof personas;
