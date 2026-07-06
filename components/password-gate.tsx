@@ -12,6 +12,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { pushToDataLayer } from "@/lib/utils";
 
 const STORAGE_KEY = "persona-ai-access";
 
@@ -47,6 +48,9 @@ export function PasswordGate({ children }: { children: ReactNode }) {
       if (res.ok) {
         window.localStorage.setItem(STORAGE_KEY, "true");
         setUnlocked(true);
+        pushToDataLayer("password_granted", {
+          timestamp: new Date().toISOString(),
+        });
       } else {
         setError("Incorrect password. Please try again.");
       }

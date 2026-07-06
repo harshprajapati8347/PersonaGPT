@@ -10,7 +10,7 @@ import { Card } from "@/components/ui/card";
 import { PasswordGate } from "@/components/password-gate";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Textarea } from "@/components/ui/textarea";
-import { cn } from "@/lib/utils";
+import { cn, pushToDataLayer } from "@/lib/utils";
 import {
   PERSONA_META,
   PERSONA_ORDER,
@@ -81,6 +81,7 @@ function Chat() {
   const [histories, setHistories] = useState<Histories>(emptyHistories);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const [count, setCount] = useState(1);
 
   const active = PERSONA_META[persona];
   const messages = histories[persona];
@@ -99,6 +100,7 @@ function Chat() {
     setHistories((prev) => ({ ...prev, [personaAtSend]: updatedMessages }));
     setInput("");
     setLoading(true);
+    setCount((prev) => prev + 1);
 
     try {
       const res = await fetch("/api/chat", {
@@ -124,6 +126,11 @@ function Chat() {
           },
         ],
       }));
+      pushToDataLayer("message_sent", {
+        user_input: input,
+        assistant_response: res.ok ? data.message : "Error",
+        count,
+      });
     } catch (err) {
       console.error(err);
       setHistories((prev) => ({
